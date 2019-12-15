@@ -20,14 +20,21 @@ server.get("/", (req, res) => {
 });
 
 server.get("/token", (req, res) => {
-  const token = jwt.sign(
-    {
-      token: "this is the token",
-      exp: 1000 * 60 * 5
-    },
-    "Tis the secret"
-  );
-  res.status(400).json(token);
+  const payload = {
+    subject: "thisuser",
+    userid: "cc",
+    favoriteSoda: "mtdew"
+  };
+
+  const secret = "thisismymagicalsecret";
+
+  const options = {
+    expiresIn: "8h"
+  };
+
+  const token = jwt.sign(payload, secret, options);
+
+  res.json(token);
 });
 
 module.exports = server;
