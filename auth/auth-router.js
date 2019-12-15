@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const secrets = require("../config/secrets");
 
 const Users = require("../users/users-model.js");
 
@@ -32,7 +33,7 @@ router.post("/login", (req, res) => {
           token: token
         });
       } else {
-        res.status(401).json({ message: "Invalid Credentials" });
+        res.status(401).json({ message: "You Shall Not Pass!" });
       }
     })
     .catch(error => {
@@ -48,10 +49,10 @@ function genToken(user) {
     username: user.username,
     department: user.department
   };
-  const secret = "thisismymagicalsecret";
+
   const options = {
     expiresIn: "8h"
   };
-  const token = jwt.sign(payload, secret, options);
+  const token = jwt.sign(payload, secrets.jwtSecret, options);
   return token;
 }
